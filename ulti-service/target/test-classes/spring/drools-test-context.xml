@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:drools="http://drools.org/schema/drools-spring"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  http://drools.org/schema/drools-spring http://drools.org/schema/drools-spring.xsd">
+
+    <drools:kbase id="wagingKBase">
+        <drools:resources>
+            <drools:resource type="DRL"
+                source="classpath:rules/WagingRule.drl" />
+        </drools:resources>
+    </drools:kbase>
+
+    <drools:ksession id="wagingKSession" name="wagingKSession"
+        type="stateful" kbase="wagingKBase" />
+    <bean id="wageRuleService" class="io.ulti.service.rule.WageRuleService">
+    </bean>
+    <bean id="game" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="io.ulti.service.domain.Game" />
+    </bean>
+</beans>

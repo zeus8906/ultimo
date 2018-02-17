@@ -1,0 +1,46 @@
+//created on: Jan 25, 2018
+package io.ulti.rule
+
+//list any import classes here.
+import io.ulti.service.domain.WageAction;
+import io.ulti.service.domain.Game;
+import io.ulti.service.domain.Player;
+
+//declare any global variables here
+
+rule "Only wage in waging phase"
+
+    when
+    	$game:Game(phase != Phase.WAGE);
+    	$action:WageAction();
+    then
+        $action.setValidAction(false);
+		$action.setStatus("The player can wage only if game is in waging phase!");
+end
+
+rule "Only talking player can wage"
+
+    when
+    	$game:Game();
+        $action:WageAction(player!=$game.getTalkingPlayer());
+    then
+        $action.setValidAction(false);
+		$action.setStatus("The player try to wage is not in talking position!");
+end
+
+rule "Cannot wage with 11 or 12 cards in your hand"
+    when
+        $action:WageAction(player.hand.size()>10);
+    then
+        $action.setValidAction(false);
+		$action.setStatus("The player must drop cards to talon!");
+end
+
+rule "Need to overwage after touching talon"
+    when
+    	$game:Game();
+        $action:WageAction(target>$game.target);
+    then
+        $action.setValidAction(false);
+		$action.setStatus("The player must overwage after touching the talon!");
+end

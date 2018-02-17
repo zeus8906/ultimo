@@ -1,0 +1,49 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	background-image: url("../images/background.jpg");
+	background-size: cover;
+	background-height: 100%;
+}
+
+#tableCenter{
+	position: absolute;
+	top: 200;
+	left: 400;
+	height: 250;
+	width: 200;
+}
+
+#opponent1Hand{
+	position: absolute;
+	top: 75;
+	left: 20;
+}
+
+#statusBar{
+	position:absolute;
+	left: 400;
+}
+
+#opponent2Hand{
+	position: absolute;
+	top: 75;
+	left: 920;
+}
+
+#playerHand {
+	position: relative;
+	top: 400;
+	left: 400;
+}
+
+.card {
+	position: absolute;
+	width: 64px;
+	height: 100px;
+}
+
+
+h1 {
+	color: yellow;
+}

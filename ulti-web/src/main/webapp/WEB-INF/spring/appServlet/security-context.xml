@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:security="http://www.springframework.org/schema/security"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+    <security:http auto-config="true" use-expressions="true">
+        <security:intercept-url pattern="/login"
+            access="permitAll" />
+        <security:intercept-url pattern="/api/login"
+            access="permitAll" />
+        <security:form-login login-page="/login"
+            username-parameter="email" password-parameter="password"
+            login-processing-url="/api/login"
+            authentication-success-handler-ref="authSuccessHandler"
+            authentication-failure-url="/login?login_error=true" />
+        <security:csrf disabled="true" />
+        <security:custom-filter ref="authenticationFilter"
+            before="FORM_LOGIN_FILTER" />
+        <security:cors />
+    </security:http>
+
+    <security:authentication-manager
+        alias="authenticationManager">
+        <security:authentication-provider>
+            <security:user-service>
+                <security:user name="bill@bill.hu"
+                    password="abc123" authorities="ROLE_USER" />
+                <security:user name="admin@admin.hu"
+                    password="root123" authorities="ROLE_ADMIN" />
+            </security:user-service>
+        </security:authentication-provider>
+    </security:authentication-manager>
+    <bean id="authenticationFilter"
+        class="io.ulti.web.authentication.JSONUsernamePasswordAuthenticationFilter">
+        <property name="authenticationManager" ref="authenticationManager" />
+        <property name="filterProcessesUrl" value="/api/login" />
+        <property name="authenticationSuccessHandler" ref="authSuccessHandler" />
+    </bean>
+    <bean id="authSuccessHandler"
+        class="io.ulti.web.authentication.PandaAuthenticationSuccessHandler">
+    </bean>
+</beans>
